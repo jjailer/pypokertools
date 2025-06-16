@@ -221,10 +221,21 @@ def get_translation_dict(flop):
     True
     """
     flop = sorted(flop)
-    suit1, suit2, suit3 = [card.suit for card in flop]
+    suits = [card.suit for card in flop]
+    suit1, suit2, suit3 = suits
+    suit_counts = {suit: suits.count(suit) for suit in suits}
+    suit_max = max(suit_counts, key=suit_counts.get)
+    suit_min = min(suit_counts, key=suit_counts.get)
 
     canonical_flop = get_canonical(flop)
-    canon1, canon2, canon3 = [card.suit for card in canonical_flop]
+    canons = sorted([card.suit for card in canonical_flop])
+    canon1, canon2, canon3 = canons
+    canon_counts = {suit: canons.count(suit) for suit in canons}
+    canon_max = max(canon_counts, key=canon_counts.get)
+    canon_min = min(canon_counts, key=canon_counts.get)
+
+    values = sorted(canon_counts.values())
+    partition = values + [0] * (3 - len(values))
 
     # if the flop matches the canonical version, no translation necessary
     if (suit1, suit2, suit3) == (canon1, canon2, canon3):
@@ -239,48 +250,27 @@ def get_translation_dict(flop):
     canonical_unused = sorted(list(canonical_unused))
     both_unused = sorted(list(both_unused))
 
-    if suit1 == suit2 == suit3:
-        # suit pattern is 'AAA'
+    # canonical forms are zero-trailing 3-part weak compositions
+    if partition == [3, 0, 0]:
         return {
-            suit1: canon1,                   # The first flop suit and the
-            canon1: suit1,                   # first canon suit must switch.
-            both_unused[0]: both_unused[0],  # The remaining two suits
-            both_unused[1]: both_unused[1],  # don't matter
+            suit1: canon1,
+            canon1: suit1,
+            both_unused[0]: both_unused[0],
+            both_unused[1]: both_unused[1],
         }
-
-    elif suit1 == suit2 != suit3:
-        # suit pattern is 'AAB'
+    elif partition in [[2, 1, 0], [1, 2, 0]]:
         return {
-            suit1: canon1,                   # suit of 1st card = 1st canon
-            suit3: canon3,                   # suit of 3rd card = 3rd canon
-            unused[0]: canonical_unused[0],  # Must be the remaining two
-            unused[1]: canonical_unused[1],  # suits of each set
+            suit_max: canon_max,
+            suit_min: canon_min,
+            unused[0]: canonical_unused[0],
+            unused[1]: canonical_unused[1],
         }
-
-    elif suit1 != suit2 == suit3:
-        # suit pattern is 'ABB'
+    elif partition == [1, 1, 1]:
         return {
-            suit1: canon1,                   # suit of 1st card = 1st canon
-            suit2: canon2,                   # suit of 2nd card = 2nd canon
-            unused[0]: canonical_unused[0],  # Must be the remaining two
-            unused[1]: canonical_unused[1],  # suits of each set
+            suit1: canon1,
+            suit2: canon2,
+            suit3: canon3,
+            unused[0]: canonical_unused[0],
         }
-
-    # Note the order of cards
-    elif suit1 == suit3 != suit2:
-        # suit pattern is 'ABA'
-        return {
-            suit1: canon1,                   # suit of 1st card = 1st canon
-            suit2: canon2,                   # suit of 2nd card = 2nd canon
-            unused[0]: canonical_unused[0],  # Must be the remaining two
-            unused[1]: canonical_unused[1],  # suits of each set
-        }
-
-    elif suit1 != suit2 != suit3:
-        # suit pattern is 'ABC'
-        return {
-            suit1: canon1,                   # suit of 1st card = 1st canon
-            suit2: canon2,                   # suit of 2nd card = 2nd canon
-            suit3: canon3,                   # suit of 3rd card = 3rd canon
-            unused[0]: canonical_unused[0],  # The remaining suits.
-        }
+    else:
+        raise ValueError(f"{flop=}")

@@ -5,6 +5,13 @@ __pycache__/
 
 # Unit test / coverage reports
 .cache
+.pytest_cache/
 
 # mypy
 .mypy_cache/
+
+# virtual environment
+venv/
+
+# IDE
+.vscode/
