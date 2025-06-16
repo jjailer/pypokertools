@@ -1,4 +1,12 @@
-# pypokertools
+# pypokertools (Maintained Fork)
+
+> **⚠️ Maintenance Notice**: This is an actively maintained fork of the original [pypokertools](https://github.com/mjwestcott/pypokertools) project. The original repository has been inactive since ~2017 and contained a critical bug that has been fixed in this fork. This version includes bug fixes, dependency updates, and ongoing maintenance.
+
+## Critical Bug Fix
+
+This fork addresses a critical error in `get_translation_dict()` returning incorrect mappings for certain flop patterns. The original maintainer has not responded to pull requests or communications. All existing functionality remains backward-compatible.
+
+**Original users**: If you're using the original pypokertools, please migrate to this maintained version to get the critical fix and future updates.
 
 ## The project
 
@@ -13,6 +21,10 @@ that I encountered as a professional poker player such as finding
 isomorphic/canonical representations of the flop, and finding nuanced hand
 properties (e.g. having 'three-to-a-straight' and 'two overcards') rather than
 'which hand ranks higher'.
+
+This is a maintained fork of a Python library for No-Limit Texas Hold'em (NLHE) poker analysis. The original project provided unique tools for professional poker analysis but became unmaintained. This fork continues development with bug fixes and improvements.
+
+The library focuses on solving unusual analysis problems encountered in professional poker play, such as finding isomorphic/canonical representations of the flop and identifying nuanced hand properties rather than basic hand ranking.
 
 ## In this repository
 
@@ -44,3 +56,9 @@ of holecards into e.g. betting and checking actions according to given criteria
 such as equity and polarity
 - a tool using the 'sklearn' machine learning framework to analyse hand
 history data
+
+## Credits
+
+Original project by [mjwestcott](https://github.com/mjwestcott) at [mjwestcott/pypokertools](https://github.com/mjwestcott/pypokertools). This maintained fork by [jjailer](https://github.com/jjailer).
+
+Special thanks to the original author for creating this valuable poker analysis toolkit.
